@@ -6,6 +6,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.hvl.dat152.obl4.util.Validator;
+
 public class SearchItemDAO {
 
   public List<SearchItem> getSearchHistoryLastFive() {
@@ -17,7 +19,7 @@ public class SearchItemDAO {
 
   public List<SearchItem> getSearchHistoryForUser(String username) {
     String sql = "SELECT * FROM SecOblig.History " 
-        + "WHERE username = '" + username 
+        + "WHERE username = '" + Validator.validString(username) 
         + "' ORDER BY datetime DESC";
     //  LIMIT 50
     // Derby lacks LIMIT

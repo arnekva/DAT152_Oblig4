@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import no.hvl.dat152.obl4.database.AppUser;
 import no.hvl.dat152.obl4.database.AppUserDAO;
 import no.hvl.dat152.obl4.util.Role;
+import no.hvl.dat152.obl4.util.Validator;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -25,13 +26,13 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
+		
 		request.removeAttribute("message");
 
 		boolean successfulLogin = false;
 
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
+		String username = Validator.validString(request.getParameter("username"));
+		String password = Validator.validString(request.getParameter("password"));
 
 		if (username != null && password != null) {
 

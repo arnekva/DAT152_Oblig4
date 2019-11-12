@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+
+import no.hvl.dat152.obl4.util.Validator;
 
 public class AppUserDAO {
 
@@ -27,7 +30,9 @@ public class AppUserDAO {
 
     try {        
       c = DatabaseHelper.getConnection();
-      s = c.createStatement();       
+      s = c.prepareStatement("SELECT * FROM SecOblig.AppUser" 
+    	        + " WHERE username = '" + username + "'"
+    	        + " AND passhash = '" + password + "'");       
       r = s.executeQuery(sql);
 
       if (r.next()) {
