@@ -54,6 +54,7 @@ public class LoginServlet extends HttpServlet {
 		}
 
 		if (successfulLogin) {
+			System.out.println("Logged inn");
 			response.sendRedirect("searchpage");
 
 		} else {
