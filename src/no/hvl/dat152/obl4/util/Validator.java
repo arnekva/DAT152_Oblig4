@@ -5,6 +5,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 public class Validator {
 
 	public static String validString(String parameter) {
-		return StringEscapeUtils.escapeHtml(parameter);
+		return parameter != null ? StringEscapeUtils.escapeHtml(parameter) : "null";
 	}
 }
