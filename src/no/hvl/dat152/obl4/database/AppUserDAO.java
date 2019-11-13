@@ -30,9 +30,7 @@ public class AppUserDAO {
 
     try {        
       c = DatabaseHelper.getConnection();
-      s = c.prepareStatement("SELECT * FROM SecOblig.AppUser" 
-    	        + " WHERE username = '" + username + "'"
-    	        + " AND passhash = '" + password + "'");       
+      s = c.createStatement();       
       r = s.executeQuery(sql);
 
       if (r.next()) {
