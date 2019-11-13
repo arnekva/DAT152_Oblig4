@@ -39,9 +39,9 @@ public class SearchResultServlet extends HttpServlet {
 			
 			String searchkey = Validator.validHTML(request
 					.getParameter("searchkey"));
+			
 			if (!RequestHelper.getLoggedInUsername(request).equals(user)) {
                 response.sendRedirect("/searchpage");
-                return;
             }
 			Timestamp datetime = new Timestamp(new Date().getTime());
 			SearchItem search = new SearchItem(datetime, user, searchkey);

@@ -48,6 +48,7 @@ public class LoginServlet extends HttpServlet {
 				if(authUser.getRole().equals(Role.ADMIN.toString())) {
 					List<String> usernames = userDAO.getUsernames();
 					request.getSession().setAttribute("usernames", usernames);
+					request.getSession().setAttribute("AntiCSRFToken", userDAO.generateAntiCSRFToken());
 					request.getSession().setAttribute("updaterole", "<a href=\"updaterole.jsp\">Update Role</a>");
 				}
 			}

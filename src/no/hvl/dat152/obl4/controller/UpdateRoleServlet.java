@@ -43,6 +43,8 @@ public class UpdateRoleServlet extends HttpServlet {
 			//Possible to send to login.jsp with an error message to be displayed
 			request.getRequestDispatcher("index.html").forward(request, response);
 			return;
+		}else {
+			System.out.println("CSRF Tokens are matching! Proceeding...");
 		}
 		
 		if(username != null) {
