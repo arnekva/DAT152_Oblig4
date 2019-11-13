@@ -1,5 +1,6 @@
 package no.hvl.dat152.obl4.database;
 
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -7,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.StringEscapeUtils;
-
-import no.hvl.dat152.obl4.util.Validator;
 
 public class AppUserDAO {
 
@@ -171,6 +169,11 @@ public class AppUserDAO {
   public String generatePassHash(String password) {
     return DigestUtils.md5Hex(password);
   }
-
+  public String generateAntiCSRFToken() {
+      SecureRandom randomToken = new SecureRandom();
+      byte bytetab[] = new byte[20];
+      randomToken.nextBytes(bytetab);
+      return DigestUtils.md5Hex(bytetab);
+  }
 }
 

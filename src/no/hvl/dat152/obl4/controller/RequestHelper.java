@@ -2,6 +2,7 @@ package no.hvl.dat152.obl4.controller;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import no.hvl.dat152.obl4.database.*;
 
 public class RequestHelper {
 
@@ -22,4 +23,7 @@ public class RequestHelper {
 	public static boolean isLoggedIn(HttpServletRequest request) {
 		return request.getSession().getAttribute("user") != null;
 	}
+	public static String getLoggedInUsername(HttpServletRequest request) {
+        return ((AppUser) request.getSession().getAttribute("user")).getUsername();
+    }
 }

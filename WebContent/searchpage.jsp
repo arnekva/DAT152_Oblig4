@@ -9,7 +9,7 @@
 </head>
 <body>
 	<h3>Main search page</h3>
-	<p><a href="mydetails">My personal details and search history</a></p>
+	<p><a href="${pageContext.request.contextPath}/mydetails">My personal details and search history</a></p>
 	<form action="dosearch" method="get">
 		<input type="hidden" name="user" value="${user.username}" /> 
 		<p>Dictionary search (enter word, e.g. Car): 

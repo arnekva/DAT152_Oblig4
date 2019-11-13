@@ -36,6 +36,15 @@ public class UpdateRoleServlet extends HttpServlet {
 		
 		AppUser user = (AppUser) request.getSession().getAttribute("user");
 		
+		if(Validator.isCSRFTokenInvalid(request)) {
+			request.getSession().invalidate();
+			System.out.println("Tokens did not match, aborting post");
+			
+			//Possible to send to login.jsp with an error message to be displayed
+			request.getRequestDispatcher("index.html").forward(request, response);
+			return;
+		}
+		
 		if(username != null) {
 			
 			if (RequestHelper.isLoggedIn(request) & user.getRole().equals(Role.ADMIN.toString())) {

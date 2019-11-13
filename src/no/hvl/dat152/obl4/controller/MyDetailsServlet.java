@@ -22,7 +22,7 @@ public class MyDetailsServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		if (RequestHelper.isLoggedIn(request)) {
-			
+			System.out.println("And now we're in here");
 			AppUser user = (AppUser) request.getSession().getAttribute("user");
 
 			SearchItemDAO searchItemDAO = new SearchItemDAO();
@@ -35,9 +35,11 @@ public class MyDetailsServlet extends HttpServlet {
 					response);
 		} else {
 			request.getSession().invalidate();
+			System.out.println("what, you're not logged in");
 			request.getRequestDispatcher("index.html").forward(request,
 					response);
 		}
+		System.out.println("You performed a GET on MYDETAILS");
 	}
 	
 	protected void doPost(HttpServletRequest request,
