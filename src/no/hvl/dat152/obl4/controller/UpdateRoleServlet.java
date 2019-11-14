@@ -38,7 +38,6 @@ public class UpdateRoleServlet extends HttpServlet {
 			request.getSession().invalidate();
 			System.out.println("Tokens did not match, aborting post");
 
-			// Possible to send to login.jsp with an error message to be displayed
 			request.getRequestDispatcher("index.html").forward(request, response);
 		} else {
 			System.out.println("CSRF Tokens are matching! Proceeding...");

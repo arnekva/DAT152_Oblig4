@@ -33,19 +33,14 @@ public class SearchResultServlet extends HttpServlet {
 				dicturl = DEFAULT_DICT_URL;
 			}
 
-			String user = Validator.validString(request.getParameter("user"));
-			//TODO: User needs to be validated
-			
+			String user = Validator.validString(request.getParameter("user"));		
 			
 			String searchkey = Validator.validHTML(request
 					.getParameter("searchkey"));
 			
 			if (!RequestHelper.getLoggedInUsername(request).equals(user)) {
-				System.out.println("names are not equal");
                 response.sendRedirect("searchpage");
                 return;
-            }else {
-            	System.out.println("They are the same");
             }
 			Timestamp datetime = new Timestamp(new Date().getTime());
 			SearchItem search = new SearchItem(datetime, user, searchkey);
