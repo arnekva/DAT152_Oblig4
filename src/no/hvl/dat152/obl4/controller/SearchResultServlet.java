@@ -41,7 +41,11 @@ public class SearchResultServlet extends HttpServlet {
 					.getParameter("searchkey"));
 			
 			if (!RequestHelper.getLoggedInUsername(request).equals(user)) {
-                response.sendRedirect("/searchpage");
+				System.out.println("names are not equal");
+                response.sendRedirect("searchpage");
+                return;
+            }else {
+            	System.out.println("They are the same");
             }
 			Timestamp datetime = new Timestamp(new Date().getTime());
 			SearchItem search = new SearchItem(datetime, user, searchkey);
@@ -54,8 +58,8 @@ public class SearchResultServlet extends HttpServlet {
 			try {
 				foundEntries = dict.findEntries(searchkey);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
+				System.out.println("Dictionary did not find entries. This may be because the dictonary on localhost is configured to the wrong port.");
 			}
 
 			request.setAttribute("searchkey", searchkey);

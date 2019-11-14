@@ -18,15 +18,15 @@ import no.hvl.dat152.obl4.util.Validator;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		request.getRequestDispatcher("login.jsp").forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		request.removeAttribute("message");
 
 		boolean successfulLogin = false;
@@ -43,9 +43,9 @@ public class LoginServlet extends HttpServlet {
 				successfulLogin = true;
 				request.getSession().setAttribute("user", authUser);
 				request.getSession().setAttribute("updaterole", "");
-				
+
 				// admin issues
-				if(authUser.getRole().equals(Role.ADMIN.toString())) {
+				if (authUser.getRole().equals(Role.ADMIN.toString())) {
 					List<String> usernames = userDAO.getUsernames();
 					request.getSession().setAttribute("usernames", usernames);
 					request.getSession().setAttribute("AntiCSRFToken", userDAO.generateAntiCSRFToken());
@@ -59,14 +59,11 @@ public class LoginServlet extends HttpServlet {
 			response.sendRedirect("searchpage");
 
 		} else {
-			request.setAttribute("message", "Username " + username
-					+ ": Login failed!");
-			request.getRequestDispatcher("login.jsp")
-					.forward(request, response);
+			request.setAttribute("message", "Username " + username + ": Login failed!");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
 		}
 	}
 }
-
 
 //XSS - <script>alert("test")</script> in search box
 //SQL Injection: set username to:  1' or 1=1 -- -     and you will be logged in as admin
