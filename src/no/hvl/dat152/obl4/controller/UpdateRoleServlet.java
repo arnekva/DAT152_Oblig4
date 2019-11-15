@@ -45,7 +45,7 @@ public class UpdateRoleServlet extends HttpServlet {
 
 		if (username != null) {
 
-			if (RequestHelper.isLoggedIn(request) & user.getRole().equals(Role.ADMIN.toString())) {
+			if (RequestHelper.isLoggedIn(request) && user.getRole().equals(Role.ADMIN.toString())) {
 
 				AppUserDAO userDAO = new AppUserDAO();
 

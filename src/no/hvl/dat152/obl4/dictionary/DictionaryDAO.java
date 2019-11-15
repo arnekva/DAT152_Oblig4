@@ -9,7 +9,7 @@ public class DictionaryDAO {
 
 	//private String opted_root = "file:///D:/opted/v003/";
 	//private String opted_root = "http://localhost:8080/opted/";
-	public static String DEFAULT_DICT_URL = "http://localhost:9092/DAT152Application/v003/";
+	public static final String DEFAULT_DICT_URL = "http://localhost:9092/DAT152Application/v003/";
 	private String opted_root;
 	
 	public DictionaryDAO(String dicturl) {

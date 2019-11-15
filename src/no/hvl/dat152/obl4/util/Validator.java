@@ -13,9 +13,14 @@ public class Validator {
 	}
 	
 	public static boolean isCSRFTokenInvalid(HttpServletRequest r) {
-		String x = (String) r.getSession().getAttribute("AntiCSRFToken");
+		String x = "";
+		try {
+			x = (String) r.getSession().getAttribute("AntiCSRFToken");
+		} catch (NullPointerException e) {
+			return true;
+		}
 		String y = r.getParameter("AntiCSRFToken");
-		return !x.equals(y) || x == null;
+		return !x.equals(y);
 		
 	}
 	public static String validHTML(String s) {
