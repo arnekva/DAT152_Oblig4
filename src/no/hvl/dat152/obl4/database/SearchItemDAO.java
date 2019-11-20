@@ -20,10 +20,34 @@ public class SearchItemDAO {
 
 	public List<SearchItem> getSearchHistoryForUser(String username) {
 		String sql = "SELECT * FROM SecOblig.History WHERE username = ? ORDER BY datetime DESC";
-		//String query 
-		// LIMIT 50
-		// Derby lacks LIMIT
-		return getSearchItemList(sql, 50);
+		
+		List<SearchItem> result = new ArrayList<SearchItem>();
+
+		Connection c = null;
+		Statement s = null;
+		ResultSet r = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			c = DatabaseHelper.getConnection();
+			pstmt = c.prepareStatement(sql);
+			pstmt.setString(1, username);
+			pstmt.setMaxRows(50);
+			r = pstmt.executeQuery();
+
+			while (r.next()) {
+				SearchItem item = new SearchItem(r.getTimestamp("datetime"), r.getString("username"),
+						r.getString("searchkey"));
+				result.add(item);
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			DatabaseHelper.closeConnection(r, s, c);
+		}
+
+		return result;
 	}
 
 	private List<SearchItem> getSearchItemList(String sql, Integer limit) {
@@ -58,8 +82,6 @@ public class SearchItemDAO {
 
 	public void saveSearch(SearchItem search) {
 
-		String sql = "INSERT INTO SecOblig.History VALUES (" + "'" + search.getDatetime() + "', " + "'"
-				+ search.getUsername() + "', " + "'" + search.getSearchkey() + "')";
 		String query = "INSERT INTO SecOblig.History VALUES (?, ?, ?)";
 
 		Connection c = null;
