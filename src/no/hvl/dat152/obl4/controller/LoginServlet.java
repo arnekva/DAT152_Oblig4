@@ -1,7 +1,9 @@
 package no.hvl.dat152.obl4.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,10 +19,17 @@ import no.hvl.dat152.obl4.util.Validator;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	Map<String, Integer> failedLoginAttempts = new HashMap<>();
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		String ip = request.getRemoteAddr();
+		if (failedLoginAttempts.containsKey(ip)) {
+			int forekomst = failedLoginAttempts.get(ip);
+			if (forekomst >= 3) {
+				request.setAttribute("message", "You have too many failed login attempts. Please contact the server administrator.");
+			}
+		}
 		request.getRequestDispatcher("login.jsp").forward(request, response);
 	}
 
@@ -28,6 +37,14 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		request.removeAttribute("message");
+		String ip = request.getRemoteAddr();
+		if (failedLoginAttempts.containsKey(ip)) {
+			int forekomst = failedLoginAttempts.get(ip);
+			if (forekomst >= 3) {
+				response.sendRedirect("login");
+				return;
+			}
+		}
 
 		boolean successfulLogin = false;
 
@@ -51,6 +68,16 @@ public class LoginServlet extends HttpServlet {
 					request.getSession().setAttribute("AntiCSRFToken", userDAO.generateAntiCSRFToken());
 					request.getSession().setAttribute("updaterole", "<a href=\"updaterole.jsp\">Update Role</a>");
 				}
+			} else {
+				if (failedLoginAttempts.containsKey(ip)) {
+					int forekomst = failedLoginAttempts.get(ip);
+					forekomst++;
+					failedLoginAttempts.put(ip, forekomst);
+				} else {
+					failedLoginAttempts.put(ip, 1);
+				}
+				response.sendRedirect("login");
+				return;
 			}
 		}
 
