@@ -2,6 +2,7 @@ package no.hvl.dat152.obl4.database;
 
 import java.security.SecureRandom;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -15,21 +16,19 @@ public class AppUserDAO {
 
     String hashedPassword = generatePassHash(password);
 
-    String sql = "SELECT * FROM SecOblig.AppUser" 
-        + " WHERE username = '" + username + "'"
-        + " AND passhash = '" + hashedPassword + "'";
-    
-    
+    String query = "SELECT * FROM SecOblig.AppUser WHERE username=? AND passhash =?";
     AppUser user = null;
 
     Connection c = null;
-    Statement s = null;
+    PreparedStatement pstmt = null;
     ResultSet r = null;
 
     try {        
       c = DatabaseHelper.getConnection();
-      s = c.createStatement();       
-      r = s.executeQuery(sql);
+      pstmt = c.prepareStatement(query);
+      pstmt.setString(1, username);
+      pstmt.setString(2, hashedPassword);
+      r = pstmt.executeQuery();
 
       if (r.next()) {
         user = new AppUser(
@@ -45,37 +44,38 @@ public class AppUserDAO {
     } catch (Exception e) {
       System.out.println(e);
     } finally {
-      DatabaseHelper.closeConnection(r, s, c);
+      DatabaseHelper.closeConnection(r, pstmt, c);
     }
 
     return user;
   }
 
   public boolean saveUser(AppUser user) {
-
-    String sql = "INSERT INTO SecOblig.AppUser VALUES (" 
-        + "'" + user.getUsername()  + "', "
-        + "'" + user.getPasshash()  + "', "
-        + "'" + user.getFirstname() + "', "
-        + "'" + user.getLastname()  + "', "
-        + "'" + user.getMobilephone()  + "', "
-        + "'" + user.getRole() + "')";
+    
+    String query = "INSERT INTO SecOblig.AppUser VALUES (?, ?, ?, ?, ?, ?)";
 
     Connection c = null;
-    Statement s = null;
+    PreparedStatement pstmt = null;
     ResultSet r = null;
 
     try {        
-      c = DatabaseHelper.getConnection();
-      s = c.createStatement();       
-      int row = s.executeUpdate(sql);
-      if(row >= 0)
-    	  return true;
+    	c = DatabaseHelper.getConnection();
+        pstmt = c.prepareStatement(query);
+        pstmt.setString(1, user.getUsername());
+        pstmt.setString(2, user.getPasshash());
+        pstmt.setString(3, user.getFirstname());
+        pstmt.setString(4, user.getLastname());
+        pstmt.setString(5, user.getMobilephone());
+        pstmt.setString(6, user.getRole());
+        int row = pstmt.executeUpdate();
+        if (row >= 0) {
+        	return true;
+        }
     } catch (Exception e) {
     	System.out.println(e);
     	return false;
     } finally {
-      DatabaseHelper.closeConnection(r, s, c);
+      DatabaseHelper.closeConnection(r, pstmt, c);
     }
     
     return false;
@@ -112,28 +112,29 @@ public class AppUserDAO {
   public boolean updateUserPassword(String username, String passwordnew) {
 	  
 	  String hashedPassword = generatePassHash(passwordnew);
-	  
-	    String sql = "UPDATE SecOblig.AppUser "
-	    		+ "SET passhash = '" + hashedPassword + "' "
-	    				+ "WHERE username = '" + username + "'";
+
+	    String query = "UPDATE SecOblig.AppUser SET passhash =? WHERE username =?";
 	
 	    Connection c = null;
-	    Statement s = null;
+	    PreparedStatement pstmt = null;
 	    ResultSet r = null;
 	
 	    try {        
 	      c = DatabaseHelper.getConnection();
-	      s = c.createStatement();       
-	      int row = s.executeUpdate(sql);
-	      System.out.println("Password update successful for "+username);
-	      if(row >= 0)
+	      pstmt = c.prepareStatement(query);
+	      pstmt.setString(1, hashedPassword);
+	      pstmt.setString(2, username);
+	      int row = pstmt.executeUpdate();  
+	      if(row >= 0) {
+	    	  System.out.println("Password update successful for "+username);
 	    	  return true;
+	      }
 	      
 	    } catch (Exception e) {
 	      System.out.println(e);
 	      return false;
 	    } finally {
-	      DatabaseHelper.closeConnection(r, s, c);
+	      DatabaseHelper.closeConnection(r, pstmt, c);
 	    }
 	    
 	    return false;
@@ -141,27 +142,27 @@ public class AppUserDAO {
   
   public boolean updateUserRole(String username, String role) {
 
-	    String sql = "UPDATE SecOblig.AppUser "
-	    		+ "SET role = '" + role + "' "
-	    				+ "WHERE username = '" + username + "'";
+	    String query = "UPDATE SecOblig.AppUser SET role =? WHERE username =?";
 	
 	    Connection c = null;
-	    Statement s = null;
+	    PreparedStatement pstmt = null;
 	    ResultSet r = null;
 	
 	    try {        
 	      c = DatabaseHelper.getConnection();
-	      s = c.createStatement();       
-	      int row = s.executeUpdate(sql);
-	      System.out.println("Role update successful for "+username+" New role = "+role);
-	      if(row >= 0)
+	      pstmt = c.prepareStatement(query);
+	      pstmt.setString(1, role);
+	      pstmt.setString(2, username);
+	      int row = pstmt.executeUpdate();  
+	      if(row >= 0) {
+	    	  System.out.println("Role update successful for "+username+" New role = "+role);
 	    	  return true;
-	      
+	      }      
 	    } catch (Exception e) {
 	      System.out.println(e);
 	      return false;
 	    } finally {
-	      DatabaseHelper.closeConnection(r, s, c);
+	      DatabaseHelper.closeConnection(r, pstmt, c);
 	    }
 	    return false;
   }
